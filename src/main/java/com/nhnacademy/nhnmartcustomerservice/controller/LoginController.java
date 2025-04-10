@@ -70,7 +70,7 @@ public class LoginController {
 
         this.currentUser = userService.getUser(id);
 
-        return "redirect:/cs/" + id;
+        return "redirect:/cs?id=" + id;
     }
 
 }

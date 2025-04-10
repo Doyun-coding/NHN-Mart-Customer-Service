@@ -1,63 +1,72 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>내 문의 목록</title>
+    <meta charset="UTF-8">
+    <title>문의하기</title>
     <style>
-        table {
+        form {
+            width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        input[type="text"], textarea, select {
             width: 100%;
-            border-collapse: collapse;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
         }
 
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
+        .buttons {
+            margin-top: 20px;
+            text-align: right;
         }
 
-        .btn-inquiry {
-            display: inline-block;
-            margin-bottom: 15px;
+        .buttons button {
             padding: 8px 16px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
+            margin-left: 10px;
         }
 
-        .btn-inquiry:hover {
-            background-color: #0056b3;
+        .error {
+            color: red;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
 
-<h2>내 문의 목록</h2>
+<h2 style="text-align: center;">문의하기</h2>
 
-<a href="/cs/inquiry" class="btn-inquiry">문의하기</a>
+<!--<a th:href="@{/cs(id=${userId})}" class="btn">뒤로 가기</a>-->
 
-<table>
-    <thead>
-    <tr>
-        <th>제목</th>
-        <th>분류</th>
-        <th>작성일시</th>
-        <th>답변 여부</th>
-    </tr>
-    </thead>
-    <tbody>
-<!--    <tr th:each="inquiry : ${inquiries}">-->
-<!--        <td>-->
-<!--            <a th:href="@{/inquiry/{id}(id=${inquiry.id})}"-->
-<!--               th:text="${inquiry.title}">문의 제목</a>-->
-<!--        </td>-->
-<!--        <td th:text="${inquiry.category}">카테고리</td>-->
-<!--        <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</td>-->
-<!--        <td>-->
-<!--            <span th:if="${inquiry.answered}">✅ 답변 완료</span>-->
-<!--            <span th:unless="${inquiry.answered}">❌ 미답변</span>-->
-<!--        </td>-->
-<!--    </tr>-->
-    </tbody>
-</table>
+<form th:action="@{/cs/inquiry(id=${userId})}" method="post" enctype="multipart/form-data">
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" th:value="${title}" minlength="2" maxlength="200" required />
+
+    <label for="category">분류</label>
+    <select id="category" name="category" required>
+        <option value="">-- 선택 --</option>
+        <option value="불만 접수" th:selected="${category == '불만 접수'}">불만 접수</option>
+        <option value="제안" th:selected="${category == '제안'}">제안</option>
+        <option value="환불/교환" th:selected="${category == '환불/교환'}">환불/교환</option>
+        <option value="칭찬해요" th:selected="${category == '칭찬해요'}">칭찬해요</option>
+        <option value="기타 문의" th:selected="${category == '기타 문의'}">기타 문의</option>
+    </select>
+
+    <label for="content">본문</label>
+    <textarea id="content" name="content" rows="10" maxlength="40000" th:text="${content}"></textarea>
+
+    <label for="files">첨부파일 (이미지 다중 선택 가능)</label>
+    <input type="file" id="files" name="files" accept=".jpg,.jpeg,.png,.gif" multiple />
+
+    <div class="buttons">
+        <button type="submit">확인</button>
+    </div>
+</form>
 
 </body>
 </html>

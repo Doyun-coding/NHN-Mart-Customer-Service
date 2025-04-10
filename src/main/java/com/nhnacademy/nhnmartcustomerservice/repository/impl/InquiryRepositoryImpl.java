@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 public class InquiryRepositoryImpl implements InquiryRepository {
-    private static final Map<String, ArrayList<Inquiry>> repository = new HashMap<>();
+    private static final Map<String, List<Inquiry>> repository = new HashMap<>();
 
     @Override
     public boolean isExistsInquiries(String id) {
@@ -19,16 +19,21 @@ public class InquiryRepositoryImpl implements InquiryRepository {
     }
 
     @Override
-    public ArrayList<Inquiry> getInquiries(String id) {
+    public List<Inquiry> getInquiries(String id) {
+        if(!isExistsInquiries(id)) {
+            List<Inquiry> inquiries = new ArrayList<>();
+            repository.put(id, inquiries);
+        }
+
         return repository.get(id);
     }
 
     @Override
-    public Inquiry getInquiry(String id, String inquiryId) {
-        ArrayList<Inquiry> inquiries = repository.get(id);
+    public Inquiry getInquiry(String id, long inquiryId) {
+        List<Inquiry> inquiries = repository.get(id);
 
         for(int i = 0; i < inquiries.size(); i++) {
-            if(inquiries.get(i).getInquiryId().equals(inquiryId)) {
+            if(inquiries.get(i).getInquiryId() == inquiryId) {
                 return inquiries.get(i);
             }
         }
@@ -39,19 +44,19 @@ public class InquiryRepositoryImpl implements InquiryRepository {
     @Override
     public void registerInquiry(String id, Inquiry inquiry) {
         if(!isExistsInquiries(id)) {
-            ArrayList<Inquiry> inquiries = new ArrayList<>();
+            List<Inquiry> inquiries = new ArrayList<>();
             repository.put(id, inquiries);
         }
 
-        ArrayList<Inquiry> inquiries = repository.get(id);
+        List<Inquiry> inquiries = repository.get(id);
         inquiries.add(inquiry);
     }
 
     @Override
-    public void deleteInquiry(String id, String inquiryId) {
-        ArrayList<Inquiry> inquiries = repository.get(id);
+    public void deleteInquiry(String id, long inquiryId) {
+        List<Inquiry> inquiries = repository.get(id);
         for(int i = 0; i < inquiries.size(); i++) {
-            if(inquiries.get(i).getInquiryId().equals(inquiryId)) {
+            if(inquiries.get(i).getInquiryId() == inquiryId) {
                 inquiries.remove(i);
                 break;
             }
@@ -61,9 +66,9 @@ public class InquiryRepositoryImpl implements InquiryRepository {
 
     @Override
     public void updateInquiry(String id, Inquiry inquiry) {
-        ArrayList<Inquiry> inquiries = repository.get(id);
+        List<Inquiry> inquiries = repository.get(id);
         for(int i = 0; i < inquiries.size(); i++) {
-            if(inquiries.get(i).getInquiryId().equals(inquiry.getInquiryId())) {
+            if(inquiries.get(i).getInquiryId() == inquiry.getInquiryId()) {
                 inquiries.set(i, inquiry);
                 break;
             }

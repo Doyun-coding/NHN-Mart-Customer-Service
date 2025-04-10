@@ -1,16 +1,21 @@
 package com.nhnacademy.nhnmartcustomerservice.controller;
 
+import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
+import com.nhnacademy.nhnmartcustomerservice.domain.request.InquiryRequest;
+import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
+import com.nhnacademy.nhnmartcustomerservice.service.impl.InquiryServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -21,8 +26,11 @@ public class InquiryController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private InquiryService inquiryService;
+
     @ModelAttribute("user")
-    public User getUser(@PathVariable(value = "id") String id, Model model) {
+    public User getUser(@RequestParam(value = "id") String id, Model model) {
         if(Objects.isNull(id)) {
             return null;
         }
@@ -30,18 +38,40 @@ public class InquiryController {
         return userService.getUser(id);
     }
 
-    @GetMapping("/{id}")
-    public String inquiry(@PathVariable(value = "id") String id, Model model) {
-        User user = userService.getUser(id);
-        if(Objects.isNull(user)) {
-            return "redirect:/login";
-        }
-
-        String userId = user.getId();
-
+    @GetMapping
+    public String inquiry(@RequestParam(value = "id") String id, Model model) {
+        model.addAttribute("userId", id);
 
         return "inquiryForm";
     }
+
+    @PostMapping
+    public String postInquiry(@RequestParam(value = "id") String id,
+                                    @ModelAttribute InquiryRequest inquiryRequest, Model model) {
+
+        log.info("here");
+
+        long inquiryId = InquiryServiceImpl.atomicLong.getAndIncrement();
+
+        String title = inquiryRequest.getTitle();
+        String category = inquiryRequest.getCategory();
+        String content = inquiryRequest.getContent();
+        LocalDateTime createdTime = LocalDateTime.now();
+        String writer = userService.getUser(id).getId();
+
+        List<String> files = inquiryRequest.getFilePath();
+        boolean answered = false;
+
+        log.info("title:{}", title);
+        log.info("category:{}", category);
+        log.info("content:{}", content);
+
+        List<Inquiry> inquiries = inquiryService.getInquiries(id);
+        inquiries.add(new Inquiry(inquiryId, title, category, content, createdTime, writer, files, answered));
+
+        return "redirect:/cs?id=" + id;
+    }
+
 
 
 }

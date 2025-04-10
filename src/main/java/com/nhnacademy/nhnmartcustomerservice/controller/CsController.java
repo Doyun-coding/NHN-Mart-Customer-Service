@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -24,29 +25,38 @@ public class CsController {
     private InquiryService inquiryService;
 
     @ModelAttribute("user")
-    public User getUser(@PathVariable(value = "id") String id) {
+    public User getUser(@RequestParam(value = "id") String id) {
         if(Objects.isNull(id)) {
             return null;
         }
-
         return userService.getUser(id);
     }
 
-    @GetMapping("/{id}")
-    public String cs(@PathVariable(value = "id") String id, Model model) {
+    @GetMapping
+    public String cs(@RequestParam(value = "id") String id, Model model) {
         User user = (User) model.getAttribute("user");
         if(Objects.isNull(user)) {
             return "redirect:/login";
         }
 
         String userId = user.getId();
-        ArrayList<Inquiry> inquiries = inquiryService.getInquiries(userId);
+        List<Inquiry> inquiries = inquiryService.getInquiries(userId);
         model.addAttribute("inquiries", inquiries);
         model.addAttribute("userId", userId);
 
         return "csForm";
     }
 
+    @PostMapping
+    public String postInquiryBtn(@RequestParam(value = "id") String id, Model model) {
+        User user = (User) model.getAttribute("user");
+        if(Objects.isNull(user)) {
+            return "redirect:/login";
+        }
 
+        String userId = user.getId();
+
+        return "redirect:/cs/inquiry?id=" + userId;
+    }
 
 }

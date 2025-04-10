@@ -6,13 +6,15 @@ import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class InquiryServiceImpl implements InquiryService {
     @Autowired
     private InquiryRepository inquiryRepository;
+
+    public static AtomicLong atomicLong = new AtomicLong(1);
 
     @Override
     public boolean isExistsInquiries(String id) {
@@ -20,27 +22,24 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
-    public boolean isExistsInquiry(String id, String inquiryId) {
-        ArrayList<Inquiry> inquiries = getInquiries(id);
+    public boolean isExistsInquiry(String id, long inquiryId) {
+        List<Inquiry> inquiries = getInquiries(id);
 
         for(int i = 0; i < inquiries.size(); i++) {
-            if(inquiries.get(i).getInquiryId().equals(inquiryId)) return true;
+            if(inquiries.get(i).getInquiryId() == inquiryId) return true;
         }
 
         return false;
     }
 
     @Override
-    public ArrayList<Inquiry> getInquiries(String id) {
-        if(!inquiryRepository.isExistsInquiries(id)) {
-            return null;
-        }
+    public List<Inquiry> getInquiries(String id) {
 
         return inquiryRepository.getInquiries(id);
     }
 
     @Override
-    public Inquiry getInquiry(String id, String inquiryId) {
+    public Inquiry getInquiry(String id, long inquiryId) {
         if(!inquiryRepository.isExistsInquiries(id)) {
             return null;
         }
@@ -60,7 +59,7 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
-    public void deleteInquiry(String id, String inquiryId) {
+    public void deleteInquiry(String id, long inquiryId) {
         if(!inquiryRepository.isExistsInquiries(id) || !isExistsInquiry(id, inquiryId)) return;
 
         inquiryRepository.deleteInquiry(id, inquiryId);
