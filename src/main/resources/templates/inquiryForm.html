@@ -1,0 +1,65 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+<head>
+    <title>내 문의 목록</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        .btn-inquiry {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .btn-inquiry:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h2>내 문의 목록</h2>
+
+<a href="/inquiry/new" class="btn-inquiry">문의하기</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>제목</th>
+        <th>분류</th>
+        <th>작성일시</th>
+        <th>답변 여부</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="inquiry : ${inquiries}">
+        <td>
+            <a th:href="@{/inquiry/{id}(id=${inquiry.id})}"
+               th:text="${inquiry.title}">문의 제목</a>
+        </td>
+        <td th:text="${inquiry.category}">카테고리</td>
+        <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</td>
+        <td>
+            <span th:if="${inquiry.answered}">✅ 답변 완료</span>
+            <span th:unless="${inquiry.answered}">❌ 미답변</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
