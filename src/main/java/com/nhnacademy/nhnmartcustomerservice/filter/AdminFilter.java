@@ -6,17 +6,15 @@ import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.util.Objects;
 
-@Component
+@RequiredArgsConstructor
 public class AdminFilter implements Filter {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     public void doFilter(ServletRequest request,
@@ -37,9 +35,7 @@ public class AdminFilter implements Filter {
                 }
 
             }
-
         }
-
     }
 
 }
