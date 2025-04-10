@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>문의 상세 내역</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+    }
+    h2 {
+      margin-top: 30px;
+    }
+    .label {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: #f9f9f9;
+      margin-bottom: 15px;
+    }
+    .answered {
+      color: green;
+      font-weight: bold;
+    }
+    .unanswered {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h2>문의 상세 내역</h2>
+
+<div>
+  <div class="label">제목</div>
+  <div class="box" th:text="${inquiry.title}">제목</div>
+
+  <div class="label">분류</div>
+  <div class="box" th:text="${inquiry.category}">분류</div>
+
+  <div class="label">작성일시</div>
+  <div class="box" th:text="${#temporals.format(inquiry.createdTime, 'yyyy-MM-dd HH:mm')}">작성일시</div>
+
+  <div class="label">본문</div>
+  <div class="box" th:text="${inquiry.content}">본문 내용</div>
+
+  <div class="label">답변 여부</div>
+  <div class="box">
+    <span th:if="${inquiry.answered}" class="answered">✅ 답변 완료</span>
+    <span th:unless="${inquiry.answered}" class="unanswered">❌ 답변 안됨</span>
+  </div>
+
+  <div th:if="${inquiry.answered}">
+    <div class="label">답변 내용</div>
+    <div class="box" th:text="${inquiry.answerContent}">답변 내용</div>
+
+    <div class="label">답변 일시</div>
+    <div class="box" th:text="${#temporals.format(inquiry.answerTime, 'yyyy-MM-dd HH:mm')}">답변 일시</div>
+
+    <div class="label">CS 담당자</div>
+    <div class="box" th:text="${inquiry.csStaff}">CS 담당자</div>
+  </div>
+</div>
+
+<br/>
+
+</body>
+</html>
