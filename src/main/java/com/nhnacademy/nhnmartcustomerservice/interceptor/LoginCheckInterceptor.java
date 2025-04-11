@@ -1,5 +1,6 @@
 package com.nhnacademy.nhnmartcustomerservice.interceptor;
 
+import com.nhnacademy.nhnmartcustomerservice.exception.NotLoginException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +29,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             }
         }
 
+        if(!loginCheck) {
+            throw new NotLoginException("로그인을 먼저 해주세요!");
+        }
 
         return loginCheck;
     }
