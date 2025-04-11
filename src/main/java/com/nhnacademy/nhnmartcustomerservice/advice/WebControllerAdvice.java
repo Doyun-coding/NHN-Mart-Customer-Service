@@ -1,9 +1,6 @@
 package com.nhnacademy.nhnmartcustomerservice.advice;
 
-import com.nhnacademy.nhnmartcustomerservice.exception.NotAdminException;
-import com.nhnacademy.nhnmartcustomerservice.exception.NotFoundUserException;
-import com.nhnacademy.nhnmartcustomerservice.exception.NotLoginException;
-import com.nhnacademy.nhnmartcustomerservice.exception.NotUserException;
+import com.nhnacademy.nhnmartcustomerservice.exception.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,6 +31,20 @@ public class WebControllerAdvice {
 
     @ExceptionHandler(NotUserException.class)
     public String notUserException(Exception ex, Model model) {
+        model.addAttribute("exception", ex);
+
+        return "error";
+    }
+
+    @ExceptionHandler(NotFoundParamException.class)
+    public String notFoundParamException(Exception ex, Model model) {
+        model.addAttribute("exception", ex);
+
+        return "error";
+    }
+
+    @ExceptionHandler(NotFoundInquiryException.class)
+    public String notFoundInquiryException(Exception ex, Model model) {
         model.addAttribute("exception", ex);
 
         return "error";

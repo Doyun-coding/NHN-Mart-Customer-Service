@@ -40,7 +40,7 @@ public class InquiryController {
     public String inquiry(@RequestParam(value = "id") String id, Model model) {
         model.addAttribute("userId", id);
 
-        return "inquiryForm";
+        return "user/inquiryForm";
     }
 
     @PostMapping

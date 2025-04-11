@@ -30,7 +30,7 @@ public class InquiryDetailController {
         Inquiry inquiry = inquiryService.getInquiry(id, inquiryId);
         model.addAttribute("inquiry", inquiry);
 
-        return "inquiryDetailForm";
+        return "user/inquiryDetailForm";
     }
 
 }

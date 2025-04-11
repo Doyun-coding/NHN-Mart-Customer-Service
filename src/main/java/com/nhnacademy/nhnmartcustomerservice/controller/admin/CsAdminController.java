@@ -43,7 +43,7 @@ public class CsAdminController {
         List<Inquiry> inquiries = inquiryService.getNotAnsweredInquiries();
         model.addAttribute("inquiries", inquiries);
 
-        return "csAdminForm";
+        return "admin/csAdminForm";
     }
 
 }

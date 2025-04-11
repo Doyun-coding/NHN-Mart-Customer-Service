@@ -43,7 +43,7 @@ public class CsController {
         model.addAttribute("inquiries", inquiries);
         model.addAttribute("userId", userId);
 
-        return "csForm";
+        return "user/csForm";
     }
 
     @PostMapping

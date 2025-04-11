@@ -48,7 +48,7 @@
   <tbody>
   <tr th:each="inquiry : ${inquiries}">
     <td>
-      <a th:href="@{/cs/admin/inquiryDetail(id=${adminId}, inquiryId=${inquiry.inquiryId})}"
+      <a th:href="@{/cs/admin/answer(id=${adminId}, inquiryId=${inquiry.inquiryId})}"
          th:text="${inquiry.title}">문의 제목</a>
     </td>
     <td th:text="${inquiry.category}">카테고리</td>
