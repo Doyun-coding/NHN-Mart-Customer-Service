@@ -32,6 +32,10 @@
 
 <h2>고객 문의 목록</h2>
 
+<form th:action="@{/logout(id=${adminId})}" method="post">
+  <button type="submit" class="btn-inquiry">로그아웃</button>
+</form>
+
 <table>
   <thead>
   <tr>

@@ -34,6 +34,10 @@
 
   <a th:href="@{/cs/inquiry(id=${userId})}" class="btn-inquiry">문의하기</a>
 
+  <form th:action="@{/logout(id=${userId})}" method="post">
+      <button type="submit" class="btn-inquiry">로그아웃</button>
+  </form>
+
   <table>
     <thead>
     <tr>
