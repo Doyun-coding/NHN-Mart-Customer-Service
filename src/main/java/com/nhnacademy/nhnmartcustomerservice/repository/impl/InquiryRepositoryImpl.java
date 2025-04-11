@@ -82,7 +82,11 @@ public class InquiryRepositoryImpl implements InquiryRepository {
         for(String key : repository.keySet()) {
             List<Inquiry> getInquiries = repository.get(key);
 
-            inquiries.addAll(getInquiries);
+            for(int i = 0; i < getInquiries.size(); i++) {
+                if(!getInquiries.get(i).isAnswered()) {
+                    inquiries.add(getInquiries.get(i));
+                }
+            }
         }
 
         return inquiries;

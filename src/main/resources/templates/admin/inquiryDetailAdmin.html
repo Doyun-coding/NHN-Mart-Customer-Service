@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>고객 문의 답변하기</title>
+  <style>
+    body {
+      max-width: 800px;
+      margin: auto;
+      font-family: Arial, sans-serif;
+    }
+    .label {
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    .box {
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .images a {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+    }
+    .buttons {
+      margin-top: 20px;
+      text-align: right;
+    }
+    .buttons button {
+      padding: 8px 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>고객 문의 답변하기</h2>
+
+<form th:action="@{/cs/admin/answer}" method="post" th:object="${answerForm}">
+
+  <div class="label">제목</div>
+  <div class="box" th:text="${inquiry.title}">제목</div>
+
+  <div class="label">분류</div>
+  <div class="box" th:text="${inquiry.category}">분류</div>
+
+  <div class="label">작성일시</div>
+  <div class="box" th:text="${#temporals.format(inquiry.createdTime, 'yyyy-MM-dd HH:mm')}">작성일시</div>
+
+  <div class="label">본문</div>
+  <div class="box" th:text="${inquiry.content}">본문 내용</div>
+
+  <div class="label">첨부 이미지</div>
+  <div class="images">
+    <div th:each="filePath : ${inquiry.filePath}">
+      <a th:href="@{/files/{fileName}(fileName=${filePath})}" target="_blank" th:text="${filePath}">파일이름</a>
+    </div>
+  </div>
+
+  <div class="label">답변</div>
+  <label>
+    <textarea name="answer" required th:text="${answerForm.answer}"></textarea>
+  </label>
+
+  <input type="hidden" name="inquiryId" th:value="${inquiry.inquiryId}" />
+
+  <div class="buttons">
+    <button type="submit">답변하기</button>
+    <a th:href="@{/cs/admin(id=${adminId})}">
+      <button type="button">취소</button>
+    </a>
+  </div>
+</form>
+
+</body>
+</html>
