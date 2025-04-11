@@ -71,4 +71,9 @@ public class InquiryServiceImpl implements InquiryService {
 
         inquiryRepository.updateInquiry(id, inquiry);
     }
+
+    @Override
+    public List<Inquiry> getNotAnsweredInquiries() {
+        return inquiryRepository.getNotAnsweredInquiries();
+    }
 }

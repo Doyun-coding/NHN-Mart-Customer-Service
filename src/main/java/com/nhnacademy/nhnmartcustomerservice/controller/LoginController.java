@@ -1,6 +1,7 @@
 package com.nhnacademy.nhnmartcustomerservice.controller;
 
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
+import com.nhnacademy.nhnmartcustomerservice.domain.auth.Auth;
 import com.nhnacademy.nhnmartcustomerservice.domain.request.UserRequest;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -69,6 +70,10 @@ public class LoginController {
         response.addCookie(cookie);
 
         this.currentUser = userService.getUser(id);
+
+        if(currentUser.getAuth().equals(Auth.ADMIN)) {
+            return "redirect:/cs/admin?id=" + id;
+        }
 
         return "redirect:/cs?id=" + id;
     }

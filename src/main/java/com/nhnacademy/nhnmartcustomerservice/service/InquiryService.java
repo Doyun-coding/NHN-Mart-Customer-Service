@@ -16,4 +16,6 @@ public interface InquiryService {
     void deleteInquiry(String id, long inquiryId);
     void updateInquiry(String id, Inquiry inquiry);
 
+    List<Inquiry> getNotAnsweredInquiries();
+
 }

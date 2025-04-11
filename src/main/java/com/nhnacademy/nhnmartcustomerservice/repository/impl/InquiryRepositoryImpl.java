@@ -74,4 +74,17 @@ public class InquiryRepositoryImpl implements InquiryRepository {
             }
         }
     }
+
+    @Override
+    public List<Inquiry> getNotAnsweredInquiries() {
+        List<Inquiry> inquiries = new ArrayList<>();
+
+        for(String key : repository.keySet()) {
+            List<Inquiry> getInquiries = repository.get(key);
+
+            inquiries.addAll(getInquiries);
+        }
+
+        return inquiries;
+    }
 }
