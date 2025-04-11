@@ -40,8 +40,13 @@ public class LoginController {
         if(Objects.nonNull(cookie) && Objects.nonNull(cookie.getValue()) && StringUtils.hasText(cookie.getValue())) {
             HttpSession session = request.getSession();
 
-            if(Objects.nonNull(currentUser) && cookie.getValue().equals(session.getId()))
-                return "redirect:/inquiry/" + currentUser.getId();
+            if(Objects.nonNull(currentUser) && cookie.getValue().equals(session.getId())) {
+                if(currentUser.getAuth().equals(Auth.ADMIN)) {
+                    return "redirect:/cs/admin?id=" + currentUser.getId();
+                }
+
+                return "redirect:/cs?id=" + currentUser.getId();
+            }
         }
 
         return "loginForm";
