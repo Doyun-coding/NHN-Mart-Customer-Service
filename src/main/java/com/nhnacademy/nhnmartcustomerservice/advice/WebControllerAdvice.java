@@ -50,4 +50,11 @@ public class WebControllerAdvice {
         return "error";
     }
 
+    @ExceptionHandler(NotMatchesIdPasswordException.class)
+    public String notMatchesIdPasswordException(Exception ex, Model model) {
+        model.addAttribute("exception", ex);
+
+        return "error";
+    }
+
 }

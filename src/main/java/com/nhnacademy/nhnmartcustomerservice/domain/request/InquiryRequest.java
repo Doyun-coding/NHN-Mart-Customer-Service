@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,6 @@ public class InquiryRequest {
     @Size(min = 0, max = 40000)
     String content;
 
-    List<String> filePath;
+    List<MultipartFile> files;
 
 }

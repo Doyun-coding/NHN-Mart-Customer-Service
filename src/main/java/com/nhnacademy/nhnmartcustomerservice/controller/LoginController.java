@@ -3,6 +3,7 @@ package com.nhnacademy.nhnmartcustomerservice.controller;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
 import com.nhnacademy.nhnmartcustomerservice.domain.auth.Auth;
 import com.nhnacademy.nhnmartcustomerservice.domain.request.UserRequest;
+import com.nhnacademy.nhnmartcustomerservice.exception.NotMatchesIdPasswordException;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,7 +67,7 @@ public class LoginController {
         String password = userRequest.getPassword();
 
         if(!userService.isMatches(id, password)) {
-            return "redirect:/login";
+            throw new NotMatchesIdPasswordException("입력하신 ID와 Password에 일치하는 계정이 존재하지 않습니다.");
         }
 
         HttpSession session = request.getSession();

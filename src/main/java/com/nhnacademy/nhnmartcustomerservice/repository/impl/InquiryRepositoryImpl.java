@@ -4,10 +4,7 @@ import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.repository.InquiryRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class InquiryRepositoryImpl implements InquiryRepository {
@@ -25,7 +22,10 @@ public class InquiryRepositoryImpl implements InquiryRepository {
             repository.put(id, inquiries);
         }
 
-        return repository.get(id);
+        List<Inquiry> list = repository.get(id);
+        list.sort(Comparator.comparing(Inquiry::getCreatedTime).reversed());
+
+        return list;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class InquiryRepositoryImpl implements InquiryRepository {
         }
 
         List<Inquiry> inquiries = repository.get(id);
-        inquiries.add(inquiry);
+        inquiries.addFirst(inquiry);
     }
 
     @Override
@@ -108,6 +108,7 @@ public class InquiryRepositoryImpl implements InquiryRepository {
                 }
             }
         }
+        inquiries.sort(Comparator.comparing(Inquiry::getCreatedTime).reversed());
 
         return inquiries;
     }

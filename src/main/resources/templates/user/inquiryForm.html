@@ -41,8 +41,6 @@
 
 <h2 style="text-align: center;">문의하기</h2>
 
-<!--<a th:href="@{/cs(id=${userId})}" class="btn">뒤로 가기</a>-->
-
 <form th:action="@{/cs/inquiry(id=${userId})}" method="post" enctype="multipart/form-data">
     <label for="title">제목</label>
     <input type="text" id="title" name="title" th:value="${title}" minlength="2" maxlength="200" required />
@@ -60,11 +58,14 @@
     <label for="content">본문</label>
     <textarea id="content" name="content" rows="10" maxlength="40000" th:text="${content}"></textarea>
 
-    <label for="files">첨부파일 (이미지 다중 선택 가능)</label>
+    <label for="files">첨부파일 (이미지 한 번에 다중 선택 가능)</label>
     <input type="file" id="files" name="files" accept=".jpg,.jpeg,.png,.gif" multiple />
 
     <div class="buttons">
         <button type="submit">확인</button>
+        <a th:href="@{/cs(id=${userId})}">
+            <button type="button">취소</button>
+        </a>
     </div>
 </form>
 

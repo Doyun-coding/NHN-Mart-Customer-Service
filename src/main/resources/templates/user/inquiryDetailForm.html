@@ -55,6 +55,19 @@
     <span th:unless="${inquiry.answered}" class="unanswered">❌ 답변 안됨</span>
   </div>
 
+  <div th:if="${inquiry.filePath != null and !inquiry.filePath.isEmpty()}">
+    <div class="label">첨부 이미지</div>
+    <div>
+      <div th:each="fileName : ${inquiry.filePath}">
+        <img th:src="@{/uploaded/{file}(file=${fileName})}"
+             alt="첨부 이미지"
+             style="max-width: 300px; margin: 10px 0;" />
+        <br />
+        <a th:href="@{/uploaded/{file}(file=${fileName})}" target="_blank" th:text="${fileName}">파일명</a>
+      </div>
+    </div>
+  </div>
+
   <div th:if="${inquiry.answered} and ${answer != null}">
     <div class="label">답변 내용</div>
     <div class="box" th:text="${answer.answerContent}">답변 내용</div>
