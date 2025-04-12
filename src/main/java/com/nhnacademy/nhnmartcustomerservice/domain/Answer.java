@@ -9,7 +9,7 @@ public class Answer {
 
     long inquiryId;
 
-    String answerContext;
+    String answerContent;
     LocalDateTime answerCreatedTime;
     String answerAdminName;
 

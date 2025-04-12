@@ -63,7 +63,7 @@ public class InquiryController {
         log.info("content:{}", content);
 
         List<Inquiry> inquiries = inquiryService.getInquiries(id);
-        inquiries.add(new Inquiry(inquiryId, title, category, content, createdTime, writer, files, answered));
+        inquiries.add(new Inquiry(id, inquiryId, title, category, content, createdTime, writer, files, answered));
 
         return "redirect:/cs?id=" + id;
     }

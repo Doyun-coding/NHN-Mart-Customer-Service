@@ -52,6 +52,11 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
+    public Inquiry getInquiryByInquiryId(long inquiryId) {
+        return inquiryRepository.getInquiryByInquiryId(inquiryId);
+    }
+
+    @Override
     public void registerInquiry(String id, Inquiry inquiry) {
         if(isExistsInquiry(id, inquiry.getInquiryId())) return;
 

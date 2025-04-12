@@ -55,15 +55,15 @@
     <span th:unless="${inquiry.answered}" class="unanswered">❌ 답변 안됨</span>
   </div>
 
-  <div th:if="${inquiry.answered}">
+  <div th:if="${inquiry.answered} and ${answer != null}">
     <div class="label">답변 내용</div>
-    <div class="box" th:text="${inquiry.answerContent}">답변 내용</div>
+    <div class="box" th:text="${answer.answerContent}">답변 내용</div>
 
     <div class="label">답변 일시</div>
-    <div class="box" th:text="${#temporals.format(inquiry.answerTime, 'yyyy-MM-dd HH:mm')}">답변 일시</div>
+    <div class="box" th:text="${#temporals.format(answer.answerCreatedTime, 'yyyy-MM-dd HH:mm')}">답변 일시</div>
 
     <div class="label">CS 담당자</div>
-    <div class="box" th:text="${inquiry.csStaff}">CS 담당자</div>
+    <div class="box" th:text="${answer.answerAdminName}">CS 담당자</div>
   </div>
 </div>
 

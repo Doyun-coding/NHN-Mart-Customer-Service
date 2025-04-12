@@ -11,6 +11,7 @@ public interface InquiryService {
 
     List<Inquiry> getInquiries(String id);
     Inquiry getInquiry(String id, long inquiryId);
+    Inquiry getInquiryByInquiryId(long inquiryId);
 
     void registerInquiry(String id, Inquiry inquiry);
     void deleteInquiry(String id, long inquiryId);

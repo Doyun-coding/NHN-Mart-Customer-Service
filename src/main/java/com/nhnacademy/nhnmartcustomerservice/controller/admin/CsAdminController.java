@@ -42,6 +42,7 @@ public class CsAdminController {
 
         List<Inquiry> inquiries = inquiryService.getNotAnsweredInquiries();
         model.addAttribute("inquiries", inquiries);
+        model.addAttribute("adminId", id);
 
         return "admin/csAdminForm";
     }

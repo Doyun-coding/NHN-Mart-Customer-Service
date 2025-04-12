@@ -8,10 +8,12 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Objects;
 
+@Slf4j
 @RequiredArgsConstructor
 public class AdminFilter implements Filter {
 
@@ -28,6 +30,8 @@ public class AdminFilter implements Filter {
         if(Objects.nonNull(req.getParameter("id"))) {
             String id = req.getParameter("id");
 
+            log.info("AdminFilter");
+
             if(Objects.nonNull(userService.getUser(id))) {
                 User user = userService.getUser(id);
 
@@ -38,6 +42,7 @@ public class AdminFilter implements Filter {
 
             }
         }
+        log.info("throw AdminFilter");
 
         throw new NotAdminException("Admin 계정이 아닙니다");
     }

@@ -39,8 +39,7 @@
 <body>
 
 <h2>고객 문의 답변하기</h2>
-
-<form th:action="@{/cs/admin/answer}" method="post" th:object="${answerForm}">
+<form th:action="@{/cs/admin/answer(id=${adminId}, inquiryId=${inquiryId})}" method="post">
 
   <div class="label">제목</div>
   <div class="box" th:text="${inquiry.title}">제목</div>
@@ -62,17 +61,15 @@
   </div>
 
   <div class="label">답변</div>
-  <label>
-    <textarea name="answer" required th:text="${answerForm.answer}"></textarea>
-  </label>
+  <textarea name="answerContent" th:text="${answerContent}"></textarea>
 
   <input type="hidden" name="inquiryId" th:value="${inquiry.inquiryId}" />
 
   <div class="buttons">
     <button type="submit">답변하기</button>
-    <a th:href="@{/cs/admin(id=${adminId})}">
-      <button type="button">취소</button>
-    </a>
+<!--    <a th:href="@{/cs/admin(id=${adminId})}">-->
+<!--      <button type="button">취소</button>-->
+<!--    </a>-->
   </div>
 </form>
 

@@ -6,6 +6,6 @@ import lombok.Value;
 public class IdInquiryIdRequest {
 
     String id;
-    String inquiryId;
+    long inquiryId;
 
 }

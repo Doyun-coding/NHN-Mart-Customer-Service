@@ -42,6 +42,26 @@ public class InquiryRepositoryImpl implements InquiryRepository {
     }
 
     @Override
+    public Inquiry getInquiryByInquiryId(long inquiryId) {
+
+        for(String key : repository.keySet()) {
+            List<Inquiry> list = repository.get(key);
+
+            for(int i = 0; i < list.size(); i++) {
+                long id = list.get(i).getInquiryId();
+
+                if(id == inquiryId) {
+                    return list.get(i);
+                }
+
+            }
+
+        }
+
+        return null;
+    }
+
+    @Override
     public void registerInquiry(String id, Inquiry inquiry) {
         if(!isExistsInquiries(id)) {
             List<Inquiry> inquiries = new ArrayList<>();
