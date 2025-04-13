@@ -56,7 +56,7 @@
   <div class="label">첨부 이미지</div>
   <div class="images">
     <div th:each="filePath : ${inquiry.filePath}">
-      <a th:href="@{/files/{fileName}(fileName=${filePath})}" target="_blank" th:text="${filePath}">파일이름</a>
+      <a th:href="@{/upload/{file}(file=${filePath})}" target="_blank" th:text="${filePath}">파일이름</a>
     </div>
   </div>
 
