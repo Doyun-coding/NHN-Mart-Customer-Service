@@ -2,6 +2,7 @@ package com.nhnacademy.nhnmartcustomerservice.controller.user;
 
 import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
+import com.nhnacademy.nhnmartcustomerservice.domain.request.IdCategoryRequest;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,16 +34,37 @@ public class CsController {
     }
 
     @GetMapping
-    public String cs(@RequestParam(value = "id") String id, Model model) {
+    public String cs(@ModelAttribute IdCategoryRequest idCategoryRequest,
+                     Model model) {
         User user = (User) model.getAttribute("user");
         if(Objects.isNull(user)) {
             return "redirect:/login";
         }
 
+        String id = idCategoryRequest.getId();
+        String category = idCategoryRequest.getCategory();
+
         String userId = user.getId();
-        List<Inquiry> inquiries = inquiryService.getInquiries(userId);
-        model.addAttribute("inquiries", inquiries);
         model.addAttribute("userId", userId);
+
+        if(Objects.isNull(category) || category.equals("전체보기")) {
+            List<Inquiry> inquiries = inquiryService.getInquiries(userId);
+            model.addAttribute("inquiries", inquiries);
+        }
+        else {
+            List<Inquiry> inquiries = inquiryService.getInquiryByInquiryIdCategory(id, category);
+            model.addAttribute("inquiries", inquiries);
+        }
+
+        List<String> categories = new ArrayList<>();
+        categories.add("전체보기");
+        categories.add("불만접수");
+        categories.add("제안");
+        categories.add("환불/교환");
+        categories.add("칭찬해요");
+        categories.add("기타문의");
+
+        model.addAttribute("categories", categories);
 
         return "user/csForm";
     }
@@ -57,5 +80,7 @@ public class CsController {
 
         return "redirect:/cs/inquiry?id=" + userId;
     }
+
+
 
 }

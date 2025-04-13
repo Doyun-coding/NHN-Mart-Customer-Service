@@ -57,4 +57,11 @@ public class WebControllerAdvice {
         return "error";
     }
 
+    @ExceptionHandler(NotFoundCategoryException.class)
+    public String notFoundCategoryException(Exception ex, Model model) {
+        model.addAttribute("exception", ex);
+
+        return "error";
+    }
+
 }

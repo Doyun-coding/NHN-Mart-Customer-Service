@@ -17,5 +17,7 @@ public interface InquiryRepository {
     void updateInquiry(String id, Inquiry inquiry);
 
     List<Inquiry> getNotAnsweredInquiries();
+    List<Inquiry> getInquiryByInquiryIdCategory(String id, String category);
+    List<Inquiry> getNotAnsweredInquiresByCategory(String category);
 
 }

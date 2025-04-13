@@ -112,4 +112,37 @@ public class InquiryRepositoryImpl implements InquiryRepository {
 
         return inquiries;
     }
+
+    @Override
+    public List<Inquiry> getInquiryByInquiryIdCategory(String id, String category) {
+        List<Inquiry> getInquiries = getInquiries(id);
+        List<Inquiry> list = new ArrayList<>();
+
+        for(int i = 0; i < getInquiries.size(); i++) {
+            if(getInquiries.get(i).getCategory().equals(category)) {
+                list.add(getInquiries.get(i));
+            }
+        }
+        list.sort(Comparator.comparing(Inquiry::getCreatedTime).reversed());
+
+        return list;
+    }
+
+    @Override
+    public List<Inquiry> getNotAnsweredInquiresByCategory(String category) {
+        List<Inquiry> inquiries = new ArrayList<>();
+
+        for(String key : repository.keySet()) {
+            List<Inquiry> getInquiries = repository.get(key);
+
+            for(int i = 0; i < getInquiries.size(); i++) {
+                if(!getInquiries.get(i).isAnswered() && getInquiries.get(i).getCategory().equals(category)) {
+                    inquiries.add(getInquiries.get(i));
+                }
+            }
+        }
+        inquiries.sort(Comparator.comparing(Inquiry::getCreatedTime).reversed());
+
+        return inquiries;
+    }
 }

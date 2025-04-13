@@ -1,6 +1,7 @@
 package com.nhnacademy.nhnmartcustomerservice.service.impl;
 
 import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
+import com.nhnacademy.nhnmartcustomerservice.exception.NotFoundCategoryException;
 import com.nhnacademy.nhnmartcustomerservice.repository.InquiryRepository;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +81,23 @@ public class InquiryServiceImpl implements InquiryService {
     @Override
     public List<Inquiry> getNotAnsweredInquiries() {
         return inquiryRepository.getNotAnsweredInquiries();
+    }
+
+    @Override
+    public List<Inquiry> getInquiryByInquiryIdCategory(String id, String category) {
+        if(!inquiryRepository.isExistsInquiries(id)) {
+            return null;
+        }
+
+        return inquiryRepository.getInquiryByInquiryIdCategory(id, category);
+    }
+
+    @Override
+    public List<Inquiry> getNotAnsweredInquiresByCategory(String category) {
+        if(!category.equals("전체보기") && !category.equals("불만접수") && !category.equals("제안") && !category.equals("환불/교환") && !category.equals("칭찬해요") && !category.equals("기타문의")) {
+            throw new NotFoundCategoryException("카테고리를 제대로 입력해주세요");
+        }
+
+        return inquiryRepository.getNotAnsweredInquiresByCategory(category);
     }
 }

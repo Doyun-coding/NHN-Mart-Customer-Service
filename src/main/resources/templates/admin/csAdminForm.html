@@ -1,10 +1,61 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>내 문의 목록</title>
+  <meta charset="UTF-8">
+  <title>고객 문의 목록</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      padding: 20px;
+    }
+
+    .sidebar {
+      width: 200px;
+      padding-right: 20px;
+      border-right: 1px solid #ccc;
+    }
+
+    .sidebar h4 {
+      margin-bottom: 10px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
+
+    .content {
+      flex: 1;
+      padding-left: 20px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 10px;
     }
 
     th, td {
@@ -30,36 +81,51 @@
 </head>
 <body>
 
-<h2>고객 문의 목록</h2>
+<div class="container">
+  <!-- 왼쪽 카테고리 사이드바 -->
+  <div class="sidebar">
+    <h4>카테고리</h4>
+    <ul>
+      <li th:each="category : ${categories}">
+        <a th:href="@{/cs/admin(id=${adminId}, category=${category})}" th:text="${category}">카테고리</a>
+      </li>
+    </ul>
+  </div>
 
-<form th:action="@{/logout(id=${adminId})}" method="post">
-  <button type="submit" class="btn-inquiry">로그아웃</button>
-</form>
+  <!-- 오른쪽 본문 영역 -->
+  <div class="content">
+    <h2>고객 문의 목록</h2>
 
-<table>
-  <thead>
-  <tr>
-    <th>제목</th>
-    <th>분류</th>
-    <th>작성일시</th>
-    <th>답변 여부</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="inquiry : ${inquiries}">
-    <td>
-      <a th:href="@{/cs/admin/answer(id=${adminId}, inquiryId=${inquiry.inquiryId})}"
-         th:text="${inquiry.title}">문의 제목</a>
-    </td>
-    <td th:text="${inquiry.category}">카테고리</td>
-    <td th:text="${#temporals.format(inquiry.createdTime, 'yyyy-MM-dd HH:mm')}">작성일</td>
-    <td>
-      <span th:if="${inquiry.answered}">✅ 답변 완료</span>
-      <span th:unless="${inquiry.answered}">❌ 미답변</span>
-    </td>
-  </tr>
-  </tbody>
-</table>
+    <form th:action="@{/logout(id=${adminId})}" method="post">
+      <button type="submit" class="btn-inquiry">로그아웃</button>
+    </form>
+
+    <table>
+      <thead>
+      <tr>
+        <th>제목</th>
+        <th>분류</th>
+        <th>작성일시</th>
+        <th>답변 여부</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="inquiry : ${inquiries}">
+        <td>
+          <a th:href="@{/cs/admin/answer(id=${adminId}, inquiryId=${inquiry.inquiryId})}"
+             th:text="${inquiry.title}">문의 제목</a>
+        </td>
+        <td th:text="${inquiry.category}">카테고리</td>
+        <td th:text="${#temporals.format(inquiry.createdTime, 'yyyy-MM-dd HH:mm')}">작성일</td>
+        <td>
+          <span th:if="${inquiry.answered}">✅ 답변 완료</span>
+          <span th:unless="${inquiry.answered}">❌ 미답변</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 </body>
 </html>

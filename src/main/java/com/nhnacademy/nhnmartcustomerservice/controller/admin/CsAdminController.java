@@ -2,6 +2,7 @@ package com.nhnacademy.nhnmartcustomerservice.controller.admin;
 
 import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
+import com.nhnacademy.nhnmartcustomerservice.domain.request.IdCategoryRequest;
 import com.nhnacademy.nhnmartcustomerservice.exception.NotFoundUserException;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,12 +39,31 @@ public class CsAdminController {
     }
 
     @GetMapping
-    public String csAdminController(@RequestParam("id") String id, Model model) {
+    public String csAdminController(@ModelAttribute IdCategoryRequest idCategoryRequest,
+                                    Model model) {
         User admin = (User) model.getAttribute("admin");
+        String adminId = idCategoryRequest.getId();
+        model.addAttribute("adminId", adminId);
 
-        List<Inquiry> inquiries = inquiryService.getNotAnsweredInquiries();
-        model.addAttribute("inquiries", inquiries);
-        model.addAttribute("adminId", id);
+        String category = idCategoryRequest.getCategory();
+        if(Objects.isNull(category) || category.equals("전체보기")) {
+            List<Inquiry> inquiries = inquiryService.getNotAnsweredInquiries();
+            model.addAttribute("inquiries", inquiries);
+        }
+        else {
+            List<Inquiry> inquiries = inquiryService.getNotAnsweredInquiresByCategory(category);
+            model.addAttribute("inquiries", inquiries);
+        }
+
+        List<String> categories = new ArrayList<>();
+        categories.add("전체보기");
+        categories.add("불만접수");
+        categories.add("제안");
+        categories.add("환불/교환");
+        categories.add("칭찬해요");
+        categories.add("기타문의");
+
+        model.addAttribute("categories", categories);
 
         return "admin/csAdminForm";
     }
