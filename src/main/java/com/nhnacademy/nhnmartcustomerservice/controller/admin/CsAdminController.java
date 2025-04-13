@@ -4,15 +4,17 @@ import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
 import com.nhnacademy.nhnmartcustomerservice.domain.request.IdCategoryRequest;
 import com.nhnacademy.nhnmartcustomerservice.exception.NotFoundUserException;
+import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
+import com.nhnacademy.nhnmartcustomerservice.validator.IdCategoryRequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,9 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/cs/admin")
 public class CsAdminController {
+
+    @Autowired
+    private IdCategoryRequestValidator validator;
 
     @Autowired
     private UserService userService;
@@ -39,8 +44,13 @@ public class CsAdminController {
     }
 
     @GetMapping
-    public String csAdminController(@ModelAttribute IdCategoryRequest idCategoryRequest,
+    public String csAdminController(@Validated @ModelAttribute IdCategoryRequest idCategoryRequest,
+                                    BindingResult bindingResult,
                                     Model model) {
+        if(bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+
         User admin = (User) model.getAttribute("admin");
         String adminId = idCategoryRequest.getId();
         model.addAttribute("adminId", adminId);
@@ -66,6 +76,11 @@ public class CsAdminController {
         model.addAttribute("categories", categories);
 
         return "admin/csAdminForm";
+    }
+
+    @InitBinder("idCategoryRequest")
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(validator);
     }
 
 }
