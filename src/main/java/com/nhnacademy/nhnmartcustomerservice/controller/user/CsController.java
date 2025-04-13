@@ -3,12 +3,17 @@ package com.nhnacademy.nhnmartcustomerservice.controller.user;
 import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
 import com.nhnacademy.nhnmartcustomerservice.domain.request.IdCategoryRequest;
+import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
+import com.nhnacademy.nhnmartcustomerservice.validator.IdCategoryRequestValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,6 +24,9 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/cs")
 public class CsController {
+
+    @Autowired
+    private IdCategoryRequestValidator validator;
 
     @Autowired
     private UserService userService;
@@ -34,8 +42,13 @@ public class CsController {
     }
 
     @GetMapping
-    public String cs(@ModelAttribute IdCategoryRequest idCategoryRequest,
+    public String cs(@Validated @ModelAttribute IdCategoryRequest idCategoryRequest,
+                     BindingResult bindingResult,
                      Model model) {
+        if(bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+
         User user = (User) model.getAttribute("user");
         if(Objects.isNull(user)) {
             return "redirect:/login";
@@ -81,6 +94,9 @@ public class CsController {
         return "redirect:/cs/inquiry?id=" + userId;
     }
 
-
+    @InitBinder("idCategoryRequest")
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(validator);
+    }
 
 }

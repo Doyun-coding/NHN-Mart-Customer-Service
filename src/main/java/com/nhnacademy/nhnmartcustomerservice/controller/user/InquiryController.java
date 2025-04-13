@@ -3,13 +3,18 @@ package com.nhnacademy.nhnmartcustomerservice.controller.user;
 import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
 import com.nhnacademy.nhnmartcustomerservice.domain.request.InquiryRequest;
+import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import com.nhnacademy.nhnmartcustomerservice.service.impl.InquiryServiceImpl;
+import com.nhnacademy.nhnmartcustomerservice.validator.InquiryRequestValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +30,9 @@ import java.util.Objects;
 @RequestMapping("/cs/inquiry")
 public class InquiryController {
     private static final String UPLOAD_DIR = "/Users/kimdoyun/Downloads/";
+
+    @Autowired
+    private InquiryRequestValidator validator;
 
     @Autowired
     private UserService userService;
@@ -50,7 +58,12 @@ public class InquiryController {
 
     @PostMapping
     public String postInquiry(@RequestParam(value = "id") String id,
-                              @ModelAttribute InquiryRequest inquiryRequest, Model model) {
+                              @Validated @ModelAttribute InquiryRequest inquiryRequest,
+                              BindingResult bindingResult,
+                              Model model) {
+        if(bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
 
         long inquiryId = InquiryServiceImpl.atomicLong.getAndIncrement();
 
@@ -93,6 +106,9 @@ public class InquiryController {
         return "redirect:/cs?id=" + id;
     }
 
-
+    @InitBinder("inquiryRequest")
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(validator);
+    }
 
 }

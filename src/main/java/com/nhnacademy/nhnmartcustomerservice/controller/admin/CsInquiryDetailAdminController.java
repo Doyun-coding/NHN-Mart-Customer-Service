@@ -8,13 +8,18 @@ import com.nhnacademy.nhnmartcustomerservice.domain.request.IdInquiryIdRequest;
 import com.nhnacademy.nhnmartcustomerservice.exception.NotFoundInquiryException;
 import com.nhnacademy.nhnmartcustomerservice.exception.NotFoundParamException;
 import com.nhnacademy.nhnmartcustomerservice.exception.NotFoundUserException;
+import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException;
 import com.nhnacademy.nhnmartcustomerservice.service.AnswerService;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
+import com.nhnacademy.nhnmartcustomerservice.validator.AnswerRequestValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -24,6 +29,9 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/cs/admin/answer")
 public class CsInquiryDetailAdminController {
+
+    @Autowired
+    private AnswerRequestValidator validator;
 
     @Autowired
     private UserService userService;
@@ -75,8 +83,12 @@ public class CsInquiryDetailAdminController {
     @PostMapping
     public String postInquiryDetail(@RequestParam("id") String id,
                                     @RequestParam("inquiryId") long inquiryId,
-                                    @ModelAttribute AnswerRequest answerRequest,
+                                    @Validated @ModelAttribute AnswerRequest answerRequest,
+                                    BindingResult bindingResult,
                                     Model model) {
+        if(bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
 
         long inqId = answerRequest.getInquiryId();
         String answerContent = answerRequest.getAnswerContent();
@@ -96,6 +108,11 @@ public class CsInquiryDetailAdminController {
         inquiryService.updateInquiry(userId, updateInquiry);
 
         return "redirect:/cs/admin?id=" + id;
+    }
+
+    @InitBinder("answerContent")
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(validator);
     }
 
 }

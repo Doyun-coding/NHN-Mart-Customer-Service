@@ -49,16 +49,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/", "/error", "/login", "/index");
     }
 
-//    @Bean
-//    public MultipartResolver multipartResolver() {
-//        return new StandardServletMultipartResolver();
-//    }
-//
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/upload").setViewName("upload");
-//    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/upload/**")

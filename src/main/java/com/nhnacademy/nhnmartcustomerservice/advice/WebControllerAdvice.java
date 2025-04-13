@@ -1,10 +1,14 @@
 package com.nhnacademy.nhnmartcustomerservice.advice;
 
 import com.nhnacademy.nhnmartcustomerservice.exception.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+@Slf4j
 @ControllerAdvice
 public class WebControllerAdvice {
 
@@ -60,6 +64,14 @@ public class WebControllerAdvice {
     @ExceptionHandler(NotFoundCategoryException.class)
     public String notFoundCategoryException(Exception ex, Model model) {
         model.addAttribute("exception", ex);
+
+        return "error";
+    }
+
+    @ExceptionHandler(ValidationFailedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String validationFailedException(ValidationFailedException ex, Model model) {
+        model.addAttribute("exception", ex.getMessage());
 
         return "error";
     }

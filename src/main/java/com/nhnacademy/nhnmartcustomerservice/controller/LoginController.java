@@ -4,7 +4,9 @@ import com.nhnacademy.nhnmartcustomerservice.domain.User;
 import com.nhnacademy.nhnmartcustomerservice.domain.auth.Auth;
 import com.nhnacademy.nhnmartcustomerservice.domain.request.UserRequest;
 import com.nhnacademy.nhnmartcustomerservice.exception.NotMatchesIdPasswordException;
+import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
+import com.nhnacademy.nhnmartcustomerservice.validator.UserRequestValidator;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
@@ -26,6 +29,9 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
+
+    @Autowired
+    private UserRequestValidator validator;
 
     @Autowired
     private UserService userService;
@@ -60,7 +66,7 @@ public class LoginController {
                             HttpServletResponse response,
                             Model model) {
         if(bindingResult.hasErrors()) {
-            throw new RuntimeException();
+            throw new ValidationFailedException(bindingResult);
         }
 
         String id = userRequest.getId();
@@ -82,6 +88,11 @@ public class LoginController {
         }
 
         return "redirect:/cs?id=" + id;
+    }
+
+    @InitBinder("userRequest")
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(validator);
     }
 
 }
