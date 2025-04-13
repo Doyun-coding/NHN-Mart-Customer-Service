@@ -3,10 +3,13 @@ package com.nhnacademy.nhnmartcustomerservice.controller.user;
 import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
 import com.nhnacademy.nhnmartcustomerservice.domain.request.IdCategoryRequest;
+import com.nhnacademy.nhnmartcustomerservice.exception.NotFoundUserException;
+import com.nhnacademy.nhnmartcustomerservice.exception.NotUserException;
 import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import com.nhnacademy.nhnmartcustomerservice.validator.IdCategoryRequestValidator;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +26,7 @@ import java.util.Objects;
 @Slf4j
 @Controller
 @RequestMapping("/cs")
+@AllArgsConstructor
 public class CsController {
 
     @Autowired
@@ -36,7 +40,7 @@ public class CsController {
     @ModelAttribute("user")
     public User getUser(@RequestParam(value = "id") String id) {
         if(Objects.isNull(id)) {
-            return null;
+            throw new NotFoundUserException("ID에 해당하는 유저를 찾지 못했습니다.");
         }
         return userService.getUser(id);
     }

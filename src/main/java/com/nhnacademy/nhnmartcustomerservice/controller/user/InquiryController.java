@@ -3,11 +3,13 @@ package com.nhnacademy.nhnmartcustomerservice.controller.user;
 import com.nhnacademy.nhnmartcustomerservice.domain.Inquiry;
 import com.nhnacademy.nhnmartcustomerservice.domain.User;
 import com.nhnacademy.nhnmartcustomerservice.domain.request.InquiryRequest;
+import com.nhnacademy.nhnmartcustomerservice.exception.NotUserException;
 import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import com.nhnacademy.nhnmartcustomerservice.service.impl.InquiryServiceImpl;
 import com.nhnacademy.nhnmartcustomerservice.validator.InquiryRequestValidator;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,7 @@ import java.util.Objects;
 @Slf4j
 @Controller
 @RequestMapping("/cs/inquiry")
+@AllArgsConstructor
 public class InquiryController {
     private static final String UPLOAD_DIR = "/Users/kimdoyun/Downloads/";
 
@@ -42,8 +45,8 @@ public class InquiryController {
 
     @ModelAttribute("user")
     public User getUser(@RequestParam(value = "id") String id, Model model) {
-        if(Objects.isNull(id)) {
-            return null;
+        if(Objects.isNull(id) || id.isEmpty()) {
+            throw new NotUserException("ID 값이 Null 입니다.");
         }
 
         return userService.getUser(id);

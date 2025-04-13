@@ -13,6 +13,7 @@ import com.nhnacademy.nhnmartcustomerservice.service.AnswerService;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import com.nhnacademy.nhnmartcustomerservice.validator.AnswerRequestValidator;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ import java.util.Objects;
 @Slf4j
 @Controller
 @RequestMapping("/cs/admin/answer")
+@AllArgsConstructor
 public class CsInquiryDetailAdminController {
 
     @Autowired
@@ -45,7 +47,7 @@ public class CsInquiryDetailAdminController {
                                                     @RequestParam("inquiryId") long inquiryId) {
         IdInquiryIdRequest inquiryIdRequest = new IdInquiryIdRequest(id, inquiryId);
 
-        if(Objects.isNull(id) || inquiryId <= 0) {
+        if(Objects.isNull(id) || id.isEmpty() || inquiryId <= 0) {
             throw new NotFoundParamException("param 값이 정확하지 않습니다");
         }
 

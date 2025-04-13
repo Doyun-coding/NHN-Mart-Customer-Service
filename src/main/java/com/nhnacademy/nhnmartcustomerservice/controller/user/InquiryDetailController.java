@@ -7,6 +7,7 @@ import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException
 import com.nhnacademy.nhnmartcustomerservice.service.AnswerService;
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.validator.IdInquiryIdRequestValidator;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @Controller
 @RequestMapping("/cs/inquiryDetail")
+@AllArgsConstructor
 public class InquiryDetailController {
 
     @Autowired

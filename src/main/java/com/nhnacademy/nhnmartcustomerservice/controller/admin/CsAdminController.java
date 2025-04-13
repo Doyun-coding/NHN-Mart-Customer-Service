@@ -8,6 +8,7 @@ import com.nhnacademy.nhnmartcustomerservice.exception.ValidationFailedException
 import com.nhnacademy.nhnmartcustomerservice.service.InquiryService;
 import com.nhnacademy.nhnmartcustomerservice.service.UserService;
 import com.nhnacademy.nhnmartcustomerservice.validator.IdCategoryRequestValidator;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/cs/admin")
+@AllArgsConstructor
 public class CsAdminController {
 
     @Autowired
@@ -52,6 +54,10 @@ public class CsAdminController {
         }
 
         User admin = (User) model.getAttribute("admin");
+        if(Objects.isNull(admin)) {
+            return "redirect:/login";
+        }
+
         String adminId = idCategoryRequest.getId();
         model.addAttribute("adminId", adminId);
 
